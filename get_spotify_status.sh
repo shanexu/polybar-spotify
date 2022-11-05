@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# The name of polybar bar which houses the main spotify module and the control modules.
-PARENT_BAR="topbar"
-PARENT_BAR_PID=$(pgrep -a "polybar" | grep "$PARENT_BAR" | cut -d" " -f1)
-
 # Set the source audio player here.
 # Players supporting the MPRIS spec are supported.
 # Examples: spotify, vlc, chrome, mpv and others.
@@ -12,10 +8,21 @@ PARENT_BAR_PID=$(pgrep -a "polybar" | grep "$PARENT_BAR" | cut -d" " -f1)
 PLAYER="chromium.instance$(pgrep -f '/usr/lib/electron/electron --enable-crashpad /usr/lib/qqmusic/app.asar')"
 # PLAYER=playerctld
 
+CMD=$1
+if [ ! -z $CMD ]; then
+    echo $CMD
+    playerctl --player=$PLAYER $CMD
+    exit
+fi
+
 # Format of the information displayed
 # Eg. {{ artist }} - {{ album }} - {{ title }}
 # See more attributes here: https://github.com/altdesktop/playerctl/#printing-properties-and-metadata
 FORMAT="{{ title }} - {{ artist }}"
+
+# The name of polybar bar which houses the main spotify module and the control modules.
+PARENT_BAR="topbar"
+PARENT_BAR_PID=$(pgrep -a "polybar" | grep "$PARENT_BAR" | cut -d" " -f1)
 
 # Sends $2 as message to all polybar PIDs that are part of $1
 update_hooks() {
