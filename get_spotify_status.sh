@@ -9,8 +9,7 @@ PLAYER="chromium.instance$(pgrep -f '/usr/lib/electron/electron --enable-crashpa
 # PLAYER=playerctld
 
 CMD=$1
-if [ ! -z $CMD ]; then
-    echo $CMD
+if [ ! -z $CMD ] && [ "$CMD" != "--status" ] ; then
     playerctl --player=$PLAYER $CMD
     exit
 fi
