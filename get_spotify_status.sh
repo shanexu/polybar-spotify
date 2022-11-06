@@ -5,11 +5,17 @@
 # Examples: spotify, vlc, chrome, mpv and others.
 # Use `playerctld` to always detect the latest player.
 # See more here: https://github.com/altdesktop/playerctl/#selecting-players-to-control
-PLAYER="chromium.instance$(pgrep -f '/usr/lib/electron/electron --enable-crashpad /usr/lib/qqmusic/app.asar')"
+QQ_MUSIC_PID=$(pgrep -f '/usr/lib/electron/electron --enable-crashpad /usr/lib/qqmusic/app.asar')
+PLAYER="chromium.instance${QQ_MUSIC_PID}"
 # PLAYER=playerctld
 
+if [ -z $QQ_MUSIC_PID ]; then
+    echo '%{T3}鈴%{T-}'
+    exit
+fi
+
 CMD=$1
-if [ ! -z $CMD ] && [ "$CMD" != "--status" ] ; then
+if [ ! -z $CMD ] && [ "$CMD" != "--status" ]; then
     playerctl --player=$PLAYER $CMD
     exit
 fi
